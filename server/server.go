@@ -14,6 +14,7 @@ func NewRouter(db *inventory.Database) http.Handler {
     mux.HandleFunc("/items", makeHandleItems(db))
     mux.HandleFunc("/item/add", makeHandleAddItem(db))
     mux.HandleFunc("/item/update", makeHandleUpdateItem(db))
+    mux.HandleFunc("/item/dispose", makeHandleDisposeItem(db)) // <-- New dispose route
     mux.HandleFunc("/", makeHandleAddItemForm(db)) 
 
     return mux

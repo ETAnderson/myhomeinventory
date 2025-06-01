@@ -26,11 +26,17 @@ func (d *Database) EnsureTables() {
                     item_substitution_id INT,
                     createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
                     lastModifiedDate DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    item_expiration_period INT,
+                    item_total_tossed INT DEFAULT 0,
                     FOREIGN KEY (item_type_id) REFERENCES item_type(id),
                     FOREIGN KEY (item_substitution_id) REFERENCES item_substitution(id)
                 );
             `,
-            ExpectedCols: []string{"id", "item_name", "itemQTY", "minimumQTY", "itemUsedToDate", "item_type_id", "item_substitution_id", "createDate", "lastModifiedDate"},
+            ExpectedCols: []string{
+                "id", "item_name", "itemQTY", "minimumQTY", "itemUsedToDate",
+                "item_type_id", "item_substitution_id", "createDate", "lastModifiedDate",
+                "item_expiration_period", "item_total_tossed",
+            },
         },
         {
             Name: "item_type",
@@ -51,6 +57,19 @@ func (d *Database) EnsureTables() {
                 );
             `,
             ExpectedCols: []string{"id", "substitution_name"},
+        },
+        {
+            Name: "item_expiration_xref",
+            CreateStmt: `
+                CREATE TABLE item_expiration_xref (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    item_id INT NOT NULL,
+                    item_creation_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    item_expiration_date DATETIME NOT NULL,
+                    FOREIGN KEY (item_id) REFERENCES inventory_item(id) ON DELETE CASCADE
+                );
+            `,
+            ExpectedCols: []string{"id", "item_id", "item_creation_date", "item_expiration_date"},
         },
     }
 

@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('addItemForm').addEventListener('submit', addItem);
 });
 
-
 /**
  * loadItems fetches the list of inventory items and populates the table.
  */
@@ -25,9 +24,13 @@ function loadItems() {
                         <button class="increment" onclick="updateItem('${item.itemName}', '+')">+</button>
                     </td>
                     <td>${item.itemUsedToDate}</td>
+                    <td>${item.itemTotalTossed || 0}</td> <!-- Total Tossed -->
                     <td>${item.minimumQTY}</td>
                     <td>${item.itemTypeName}</td>
                     <td>${item.itemSubstitutionName}</td>
+                    <td>
+                        <button class="dispose" onclick="disposeItem('${item.itemName}')">🗑️ Dispose</button>
+                    </td>
                 `;
 
                 tableBody.appendChild(row);
@@ -35,7 +38,6 @@ function loadItems() {
         })
         .catch(error => console.error('Error loading items:', error));
 }
-
 
 /**
  * addItem handles form submission to add a new inventory item.
@@ -48,8 +50,9 @@ function addItem(event) {
     const itemSubstitutionID = document.getElementById('itemSubstitutionID').value;
     const itemQTY = document.getElementById('itemQTY').value.trim();
     const minimumQTY = document.getElementById('minimumQTY').value.trim();
+    const itemExpirationPeriod = document.getElementById('itemExpirationPeriod').value.trim();
 
-    if (!itemName || !itemTypeID || !itemSubstitutionID || !itemQTY || !minimumQTY) {
+    if (!itemName || !itemTypeID || !itemSubstitutionID || !itemQTY || !minimumQTY || !itemExpirationPeriod) {
         console.error('All fields are required.');
         return;
     }
@@ -60,6 +63,7 @@ function addItem(event) {
     formData.append('itemSubstitutionID', itemSubstitutionID);
     formData.append('itemQTY', itemQTY);
     formData.append('minimumQTY', minimumQTY);
+    formData.append('itemExpirationPeriod', itemExpirationPeriod);
 
     fetch('/item/add', {
         method: 'POST',
@@ -87,8 +91,6 @@ function updateItem(itemName, action) {
     formData.append('itemName', itemName);
     formData.append('action', action);
 
-    console.log("Sending update request:", itemName, action); // ✅ Log what we're sending
-
     fetch('/item/update', {
         method: 'POST',
         headers: {
@@ -98,7 +100,6 @@ function updateItem(itemName, action) {
     })
     .then(response => {
         if (response.ok) {
-            console.log("Update successful"); // ✅ Log success
             loadItems();
         } else {
             console.error('Failed to update item.', response.statusText);
@@ -107,3 +108,30 @@ function updateItem(itemName, action) {
     .catch(error => console.error('Error updating item:', error));
 }
 
+/**
+ * disposeItem sends a request to dispose of an expired inventory item.
+ */
+function disposeItem(itemName) {
+    const formData = new URLSearchParams();
+    formData.append('itemName', itemName);
+
+    fetch('/item/dispose', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Failed to dispose item.');
+        }
+    })
+    .then(data => {
+        console.log('Disposed:', data);
+        loadItems(); // Refresh the table, no alert
+    })
+    .catch(error => console.error('Error disposing item:', error));
+}

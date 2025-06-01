@@ -10,11 +10,6 @@ import (
     "myhomeinventory/internal/inventory"
 )
 
-// serveHome serves the home page (not used since we switched to dynamic form rendering).
-func serveHome(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, "templates/index.html")
-}
-
 // makeHandleItems returns an HTTP handler that retrieves the list of inventory items.
 func makeHandleItems(db *inventory.Database) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +61,7 @@ func makeHandleAddItemForm(db *inventory.Database) http.HandlerFunc {
             return
         }
 
-        tmpl, err := template.ParseFiles("templates/index.html") // ✅ Corrected here
+        tmpl, err := template.ParseFiles("templates/index.html")
         if err != nil {
             fmt.Println("Failed to parse template:", err)
             http.Error(w, "Failed to load form", http.StatusInternalServerError)
@@ -101,6 +96,7 @@ func makeHandleAddItem(db *inventory.Database) http.HandlerFunc {
         minQtyStr := r.FormValue("minimumQTY")
         itemTypeIDStr := r.FormValue("itemTypeID")
         itemSubstitutionIDStr := r.FormValue("itemSubstitutionID")
+        itemExpirationPeriodStr := r.FormValue("itemExpirationPeriod")
 
         qty, err := strconv.Atoi(qtyStr)
         if err != nil {
@@ -130,13 +126,21 @@ func makeHandleAddItem(db *inventory.Database) http.HandlerFunc {
             return
         }
 
+        itemExpirationPeriod, err := strconv.Atoi(itemExpirationPeriodStr)
+        if err != nil {
+            fmt.Println("Invalid item expiration period:", itemExpirationPeriodStr)
+            http.Error(w, "Invalid item expiration period", http.StatusBadRequest)
+            return
+        }
+
         newItem := inventory.InventoryItem{
-            ItemName:           itemName,
-            ItemQTY:            qty,
-            MinimumQTY:         minQty,
-            ItemUsedToDate:     0,
-            ItemTypeID:         itemTypeID,
-            ItemSubstitutionID: itemSubstitutionID,
+            ItemName:             itemName,
+            ItemQTY:              qty,
+            MinimumQTY:           minQty,
+            ItemUsedToDate:       0,
+            ItemTypeID:           itemTypeID,
+            ItemSubstitutionID:   itemSubstitutionID,
+            ItemExpirationPeriod: itemExpirationPeriod,
         }
 
         id, err := inventory.InsertItem(db, newItem)
@@ -151,5 +155,30 @@ func makeHandleAddItem(db *inventory.Database) http.HandlerFunc {
         }
         w.Header().Set("Content-Type", "application/json")
         json.NewEncoder(w).Encode(resp)
+    }
+}
+
+// makeHandleDisposeItem returns an HTTP handler that disposes of an expired inventory item.
+func makeHandleDisposeItem(db *inventory.Database) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        if r.Method != http.MethodPost {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+            return
+        }
+
+        itemName := r.FormValue("itemName")
+        if itemName == "" {
+            http.Error(w, "Item name required", http.StatusBadRequest)
+            return
+        }
+
+        result, err := inventory.DisposeItem(db, itemName)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusBadRequest)
+            return
+        }
+
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(result)
     }
 }

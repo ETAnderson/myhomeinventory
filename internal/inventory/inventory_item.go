@@ -2,26 +2,29 @@ package inventory
 
 import "time"
 
-// InventoryItem represents an item in the inventory.
+// InventoryItem represents a record in the inventory_item table.
 type InventoryItem struct {
-    ID                 int       `json:"id"`
-    ItemName           string    `json:"itemName"`
-    ItemQTY            int       `json:"itemQTY"`
-    MinimumQTY         int       `json:"minimumQTY"`
-    ItemUsedToDate     int       `json:"itemUsedToDate"`
-    ItemTypeID         int       `json:"itemTypeID"`
-    ItemSubstitutionID int       `json:"itemSubstitutionID"`
-    CreateDate         time.Time `json:"createDate"`
-    LastModifiedDate   time.Time `json:"lastModifiedDate"`
+    ID                  int       `json:"id"`
+    ItemName            string    `json:"itemName"`
+    ItemQTY             int       `json:"itemQTY"`
+    MinimumQTY          int       `json:"minimumQTY"`
+    ItemUsedToDate      int       `json:"itemUsedToDate"`
+    ItemTypeID          int       `json:"itemTypeID"`
+    ItemSubstitutionID  int       `json:"itemSubstitutionID"`
+    ItemExpirationPeriod int      `json:"itemExpirationPeriod"`
+    ItemTotalTossed     int       `json:"itemTotalTossed"`
+    CreateDate          time.Time `json:"createDate"`
+    LastModifiedDate    time.Time `json:"lastModifiedDate"`
 }
 
-// InventoryItemWithDetails represents an item with type and substitution names included.
+// InventoryItemWithDetails represents an inventory item with type and substitution names for display purposes.
 type InventoryItemWithDetails struct {
     ID                   int       `json:"id"`
     ItemName             string    `json:"itemName"`
     ItemQTY              int       `json:"itemQTY"`
     MinimumQTY           int       `json:"minimumQTY"`
     ItemUsedToDate       int       `json:"itemUsedToDate"`
+    ItemTotalTossed      int       `json:"itemTotalTossed"`
     ItemTypeName         string    `json:"itemTypeName"`
     ItemSubstitutionName string    `json:"itemSubstitutionName"`
     CreateDate           time.Time `json:"createDate"`

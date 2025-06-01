@@ -25,10 +25,11 @@
                 <option value="{{.ID}}">{{.Name}}</option>
             {{end}}
         </select>
-        
 
         <input type="number" id="itemQTY" name="itemQTY" placeholder="Quantity" required>
         <input type="number" id="minimumQTY" name="minimumQTY" placeholder="Minimum Quantity" required>
+        <input type="number" id="itemExpirationPeriod" name="itemExpirationPeriod" placeholder="Expiration Period (Days)" required>
+
         <button type="submit">Add Item</button>
     </form>
 
@@ -38,9 +39,11 @@
                 <th>Name</th>
                 <th>Quantity</th>
                 <th>Used to Date</th>
+                <th>Total Tossed</th> <!-- ✅ Added this -->
                 <th>Minimum Quantity</th>
                 <th>Type</th>
                 <th>Substitution</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody id="inventoryTableBody">
