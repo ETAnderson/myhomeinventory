@@ -1,0 +1,28 @@
+# Binaries
+bin/
+*.exe
+*.out
+*.test
+
+# Build artifacts
+*.o
+*.a
+*.so
+
+# Dependency directories
+vendor/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE and editor folders/files
+.vscode/
+.idea/
+*.swp
+
+# Environment files
+.env
+
+# Go mod cache
+go.sum
