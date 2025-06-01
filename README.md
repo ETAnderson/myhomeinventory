@@ -49,34 +49,17 @@ APP_PORT=8080
 ```
 ⚠️ Note: Ensure your MySQL server is running and the inventory_db database exists.
 
-4. Create the Database Table
-If it doesn’t exist already, create the item_inventory table:
-
-
-```sql
-CREATE TABLE item_inventory (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    itemName VARCHAR(255) NOT NULL,
-    itemQTY INT NOT NULL,
-    minimumQTY INT NOT NULL,
-    itemUsedToDate INT NOT NULL DEFAULT 0,
-    itemType VARCHAR(100),
-    createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    lastModifiedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-5. Run the Server
+4. Run the Server
 
 ```bash
 go run ./cmd/inventory
 ```
-6. Open the Application
+5. Open the Application
 Visit:
 
-arduino
-Copy
-Edit
-http://localhost:8080
+```arduino
+this is defined by the APP_HOST and APP_PORT environment variables like http://localhost:8080/
+```
 You should see the Home Inventory web interface.
 
 Project Structure
