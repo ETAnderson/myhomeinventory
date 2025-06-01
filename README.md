@@ -1,4 +1,4 @@
-# MyHomeInventory
+ # MyHomeInventory
 
 A lightweight, single-page web application for managing a simple home inventory — groceries, food, and household items — with a MySQL backend and a Go server.
 
@@ -36,7 +36,11 @@ cd myhomeinventory
 go mod tidy
 ```
 3. Configure Environment Variables
-Create a .env file in the project root:
+Copy the example environment file:
+
+```bash
+cp env.example .env
+```
 
 ```dotenv
 DB_USER=your_db_user
