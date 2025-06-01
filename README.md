@@ -38,8 +38,7 @@ go mod tidy
 3. Configure Environment Variables
 Create a .env file in the project root:
 
-dotenv
-```
+```dotenv
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
