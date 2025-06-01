@@ -30,17 +30,16 @@ A lightweight, single-page web application for managing a simple home inventory 
 ```bash
 git clone https://github.com/yourusername/myhomeinventory.git
 cd myhomeinventory
+```
 2. Install Go Dependencies
-bash
-Copy
-Edit
+```bash
 go mod tidy
+```
 3. Configure Environment Variables
 Create a .env file in the project root:
 
 dotenv
-Copy
-Edit
+```
 DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_HOST=localhost
@@ -48,14 +47,14 @@ DB_PORT=3306
 DB_NAME=inventory_db
 APP_HOST=localhost
 APP_PORT=8080
+```
 ⚠️ Note: Ensure your MySQL server is running and the inventory_db database exists.
 
 4. Create the Database Table
 If it doesn’t exist already, create the item_inventory table:
 
-sql
-Copy
-Edit
+
+```sql
 CREATE TABLE item_inventory (
     id INT AUTO_INCREMENT PRIMARY KEY,
     itemName VARCHAR(255) NOT NULL,
@@ -66,11 +65,12 @@ CREATE TABLE item_inventory (
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastModifiedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+```
 5. Run the Server
-bash
-Copy
-Edit
+
+```bash
 go run ./cmd/inventory
+```
 6. Open the Application
 Visit:
 
@@ -81,9 +81,7 @@ http://localhost:8080
 You should see the Home Inventory web interface.
 
 Project Structure
-text
-Copy
-Edit
+```text
 myhomeinventory/
 ├── cmd/
 │   └── inventory/        # Main entry point
@@ -97,24 +95,28 @@ myhomeinventory/
 │   └── index.html
 ├── .env                   # Environment variables (not committed)
 ├── go.mod                 # Go module file
-└── README.md
+└── README.me
+```
 Configuration
+```text
 All application configuration is handled via the .env file:
 
 Database credentials (user, password, host, port, name)
 
 Application host and port
-
+```
 Dependencies
+```text
 github.com/go-sql-driver/mysql — MySQL driver for Go
 
 github.com/joho/godotenv — Environment variable loader
-
+```
 Installed automatically via:
 
-bash
-Copy
-Edit
-go mod tidy
+```bash
+ go mod tidy
+```
 License
+```
 This project is licensed under the MIT License.
+```
