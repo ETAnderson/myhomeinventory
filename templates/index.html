@@ -9,9 +9,24 @@
 <body>
     <h1>Inventory Manager</h1>
 
-    <form id="addItemForm">
+    <form id="addItemForm" method="POST" action="/item/add">
         <input type="text" id="itemName" name="itemName" placeholder="Item Name" required>
-        <input type="text" id="itemType" name="itemType" placeholder="Item Type" required>
+
+        <select id="itemTypeID" name="itemTypeID" required>
+            <option value="">-- Select Item Type --</option>
+            {{range .ItemTypes}}
+                <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+
+        <select id="itemSubstitutionID" name="itemSubstitutionID" required>
+            <option value="">-- Select Item Substitution --</option>
+            {{range .ItemSubstitutions}}
+                <option value="{{.ID}}">{{.Name}}</option>
+            {{end}}
+        </select>
+        
+
         <input type="number" id="itemQTY" name="itemQTY" placeholder="Quantity" required>
         <input type="number" id="minimumQTY" name="minimumQTY" placeholder="Minimum Quantity" required>
         <button type="submit">Add Item</button>
@@ -25,10 +40,11 @@
                 <th>Used to Date</th>
                 <th>Minimum Quantity</th>
                 <th>Type</th>
+                <th>Substitution</th>
             </tr>
         </thead>
         <tbody id="inventoryTableBody">
-            <!-- JS will populate this -->
+            <!-- JavaScript will populate inventory rows -->
         </tbody>
     </table>
 </body>

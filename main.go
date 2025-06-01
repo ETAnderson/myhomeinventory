@@ -10,6 +10,9 @@ import (
     "myhomeinventory/server"
 )
 
+// main is the entry point of the application.
+// It loads environment variables, initializes the database connection,
+// ensures required tables exist, sets up the router, and starts the HTTP server.
 func main() {
     requiredEnv := []string{
         "DB_USER",
@@ -25,18 +28,14 @@ func main() {
     defer db.Shutdown()
 
     fmt.Println("Database connected successfully.")
-    fmt.Println("Connected to MySQL successfully!")
+    fmt.Println("Connected to MySQL successfully.")
 
-    err := inventory.EnsureItemInventoryTable(db)
-    if err != nil {
-        log.Fatalf("Failed to ensure table exists: %v", err)
-    }
+    db.EnsureTables()
 
     fmt.Println("Database is ready.")
 
     router := server.NewRouter(db)
 
-    // ✨ Dynamically get host and port
     host := os.Getenv("APP_HOST")
     port := os.Getenv("APP_PORT")
 

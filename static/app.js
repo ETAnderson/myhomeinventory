@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('addItemForm').addEventListener('submit', addItem);
 });
 
+
+/**
+ * loadItems fetches the list of inventory items and populates the table.
+ */
 function loadItems() {
     fetch('/items')
         .then(response => response.json())
@@ -22,7 +26,8 @@ function loadItems() {
                     </td>
                     <td>${item.itemUsedToDate}</td>
                     <td>${item.minimumQTY}</td>
-                    <td>${item.itemType}</td>
+                    <td>${item.itemTypeName}</td>
+                    <td>${item.itemSubstitutionName}</td>
                 `;
 
                 tableBody.appendChild(row);
@@ -31,22 +36,28 @@ function loadItems() {
         .catch(error => console.error('Error loading items:', error));
 }
 
+
+/**
+ * addItem handles form submission to add a new inventory item.
+ */
 function addItem(event) {
     event.preventDefault();
 
     const itemName = document.getElementById('itemName').value.trim();
-    const itemType = document.getElementById('itemType').value.trim();
+    const itemTypeID = document.getElementById('itemTypeID').value;
+    const itemSubstitutionID = document.getElementById('itemSubstitutionID').value;
     const itemQTY = document.getElementById('itemQTY').value.trim();
     const minimumQTY = document.getElementById('minimumQTY').value.trim();
 
-    if (!itemName || !itemType || !itemQTY || !minimumQTY) {
+    if (!itemName || !itemTypeID || !itemSubstitutionID || !itemQTY || !minimumQTY) {
         console.error('All fields are required.');
         return;
     }
 
     const formData = new URLSearchParams();
     formData.append('itemName', itemName);
-    formData.append('itemType', itemType);
+    formData.append('itemTypeID', itemTypeID);
+    formData.append('itemSubstitutionID', itemSubstitutionID);
     formData.append('itemQTY', itemQTY);
     formData.append('minimumQTY', minimumQTY);
 
@@ -59,7 +70,6 @@ function addItem(event) {
     })
     .then(response => {
         if (response.ok) {
-            console.log('Item added successfully.');
             document.getElementById('addItemForm').reset();
             loadItems();
         } else {
@@ -69,10 +79,15 @@ function addItem(event) {
     .catch(error => console.error('Error adding item:', error));
 }
 
+/**
+ * updateItem sends a request to update the quantity of an inventory item.
+ */
 function updateItem(itemName, action) {
     const formData = new URLSearchParams();
     formData.append('itemName', itemName);
     formData.append('action', action);
+
+    console.log("Sending update request:", itemName, action); // ✅ Log what we're sending
 
     fetch('/item/update', {
         method: 'POST',
@@ -83,10 +98,12 @@ function updateItem(itemName, action) {
     })
     .then(response => {
         if (response.ok) {
+            console.log("Update successful"); // ✅ Log success
             loadItems();
         } else {
-            console.error('Failed to update item.');
+            console.error('Failed to update item.', response.statusText);
         }
     })
     .catch(error => console.error('Error updating item:', error));
 }
+

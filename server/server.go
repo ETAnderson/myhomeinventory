@@ -5,19 +5,16 @@ import (
     "myhomeinventory/internal/inventory"
 )
 
+// NewRouter creates a new HTTP router with all the application's routes configured.
+// It serves static files, API endpoints, and the main application page.
 func NewRouter(db *inventory.Database) http.Handler {
     mux := http.NewServeMux()
 
-    // Serve static files first
     mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-
-    // API routes FIRST
     mux.HandleFunc("/items", makeHandleItems(db))
     mux.HandleFunc("/item/add", makeHandleAddItem(db))
     mux.HandleFunc("/item/update", makeHandleUpdateItem(db))
-
-    // Finally: Serve the SPA
-    mux.HandleFunc("/", serveHome)
+    mux.HandleFunc("/", makeHandleAddItemForm(db)) 
 
     return mux
 }
