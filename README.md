@@ -1,45 +1,44 @@
-MyHomeInventory
+# MyHomeInventory
+
 A lightweight, single-page web application for managing a simple home inventory — groceries, food, and household items — with a MySQL backend and a Go server.
 
-📚 Features
-Add new items to your inventory
+---
 
-View all items in a simple table
+## Features
 
-Increment (+) and decrement (−) item quantities
+- Add new items to your inventory
+- View all items in a simple table
+- Increment (`+`) and decrement (`−`) item quantities
+- Track item usage over time
+- Lightweight, fast, and no heavy frameworks
 
-Track item usage over time
+---
 
-Lightweight, fast, and no heavy frameworks
+## Requirements
 
-🚀 Requirements
-Go (1.20+)
+- [Go 1.20+](https://golang.org/dl/)
+- [MySQL Server](https://dev.mysql.com/downloads/mysql/)
+- [MySQL Workbench (optional)](https://dev.mysql.com/downloads/workbench/)
+- A modern web browser (Chrome, Firefox, Edge)
 
-MySQL Server
+---
 
-MySQL Workbench (optional)
+## Setup Instructions
 
-A modern web browser (Chrome, Firefox, Edge)
+### 1. Clone the Repository
 
-🛠️ Setup Instructions
-Clone this repository
-
+```bash
+git clone https://github.com/yourusername/myhomeinventory.git
+cd myhomeinventory
+2. Install Go Dependencies
 bash
 Copy
 Edit
-git clone https://github.com/yourusername/myhomeinventory.git
-cd myhomeinventory
-Install dependencies
-
-go
-Copy
-Edit
 go mod tidy
-Configure your environment
-
+3. Configure Environment Variables
 Create a .env file in the project root:
 
-ini
+dotenv
 Copy
 Edit
 DB_USER=your_db_user
@@ -49,13 +48,12 @@ DB_PORT=3306
 DB_NAME=inventory_db
 APP_HOST=localhost
 APP_PORT=8080
-⚠️ Note: Make sure your MySQL server is running and the database inventory_db exists.
+⚠️ Note: Ensure your MySQL server is running and the inventory_db database exists.
 
-Create the table
+4. Create the Database Table
+If it doesn’t exist already, create the item_inventory table:
 
-If it doesn't exist already, create the item_inventory table:
-
-pgsql
+sql
 Copy
 Edit
 CREATE TABLE item_inventory (
@@ -68,15 +66,13 @@ CREATE TABLE item_inventory (
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lastModifiedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-Run the server
-
-arduino
+5. Run the Server
+bash
 Copy
 Edit
 go run ./cmd/inventory
-Open the application
-
-Open your browser and navigate to:
+6. Open the Application
+Visit:
 
 arduino
 Copy
@@ -84,8 +80,8 @@ Edit
 http://localhost:8080
 You should see the Home Inventory web interface.
 
-📁 Project Structure
-csharp
+Project Structure
+text
 Copy
 Edit
 myhomeinventory/
@@ -102,19 +98,23 @@ myhomeinventory/
 ├── .env                   # Environment variables (not committed)
 ├── go.mod                 # Go module file
 └── README.md
-🔧 Configuration
-All configuration is handled via the .env file:
+Configuration
+All application configuration is handled via the .env file:
 
-Database user/password/host/port
+Database credentials (user, password, host, port, name)
 
-Application host/port
+Application host and port
 
-📦 Dependencies
+Dependencies
 github.com/go-sql-driver/mysql — MySQL driver for Go
 
-github.com/joho/godotenv — .env loader
+github.com/joho/godotenv — Environment variable loader
 
-Installed automatically via go mod tidy.
+Installed automatically via:
 
-📝 License
-MIT License. See LICENSE file for details.
+bash
+Copy
+Edit
+go mod tidy
+License
+This project is licensed under the MIT License.
