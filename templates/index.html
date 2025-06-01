@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventory Manager</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <h1>Inventory Manager</h1>
+
+    <form id="addItemForm">
+        <input type="text" id="itemName" name="itemName" placeholder="Item Name" required>
+        <input type="text" id="itemType" name="itemType" placeholder="Item Type" required>
+        <input type="number" id="itemQTY" name="itemQTY" placeholder="Quantity" required>
+        <input type="number" id="minimumQTY" name="minimumQTY" placeholder="Minimum Quantity" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Used to Date</th>
+                <th>Minimum Quantity</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTableBody">
+            <!-- JS will populate this -->
+        </tbody>
+    </table>
+</body>
+</html>
